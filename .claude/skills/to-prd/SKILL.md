@@ -23,8 +23,9 @@ Do NOT interview the user — just synthesize what you already know from the con
 
 3. **Ensure the working folder is a git repo wired to a GitHub remote.** `gh issue create` (and downstream tooling like `ralph/afk.sh`) resolves the target repo from the current directory's git remote, so this must exist before publishing.
 
-   - If `git rev-parse --is-inside-work-tree` fails, run `git init` in the working folder.
-   - Determine the repo name (default to the working folder's basename, e.g. `TodoApp`) under the resolved `<owner>` (see "Resolving the GitHub owner" above).
+   - If `git rev-parse --is-inside-work-tree` fails, the working folder is not yet a git repo: run `git init` in the working folder and use the **working folder's basename** as the repo name (e.g. `C:\Dev\Kim\TodoApp` → `TodoApp`) without asking the user.
+   - If the folder is already a git repo, derive the repo name from its `origin` remote when one is set; otherwise fall back to the working folder's basename.
+   - The repo lives under the resolved `<owner>` (see "Resolving the GitHub owner" above).
    - If the GitHub repo does not already exist, create it: `gh repo create <owner>/<repo> --private --source . --remote origin`. This both creates the remote repo and wires up `origin` in one step.
    - If the repo already exists but `origin` is not set locally, add it: `git remote add origin https://github.com/<owner>/<repo>.git`.
    - Verify with `git remote -v` and `gh repo view <owner>/<repo>` before continuing.
